@@ -132,4 +132,27 @@ class Product extends Connection
             return false; // Error occurred while inserting data
         }
     }
+
+    public function getProductIdByController($productId)
+    {
+        $connection = $this->getConnection();
+
+        // Assuming the table name is 'products'
+        $query = "SELECT productid FROM products WHERE productid = ?";
+        $statement = mysqli_prepare($connection, $query);
+
+        if ($statement) {
+            mysqli_stmt_bind_param($statement, 'i', $productId);
+            mysqli_stmt_execute($statement);
+
+            mysqli_stmt_bind_result($statement, $result);
+
+            if (mysqli_stmt_fetch($statement)) {
+                return $result;
+            }
+        }
+
+        return false;
+    }
+
 }
