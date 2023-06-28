@@ -31,31 +31,32 @@
     }
     ?>
 
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm py-3 px-2 fixed-top z-3">
-        <form class="container-fluid" action="" method="post">
-            <a class="btn btn-outline-secondary me-3" data-bs-toggle="offcanvas" href="#offcanvasExample" role="button"
-                aria-controls="offcanvasExample">
-                <!-- Link with href -->
-                <span class="navbar-toggler-icon"></span>
-            </a>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm py-3 px-2 fixed-top z-3">
+    <form class="container-fluid" action="" method="post">
+        <a class="btn btn-outline-secondary me-3" data-bs-toggle="offcanvas" href="#offcanvasExample" role="button"
+            aria-controls="offcanvasExample">
+            <!-- Link with href -->
+            <span class="navbar-toggler-icon"></span>
+        </a>
 
-            <a class="navbar-brand" href="#"><b>Megah Holdings</b></a>
-            <?php
+        <a class="navbar-brand" href="#"><b>Megah Holdings</b></a>
 
-            session_start();
+        <?php
+        session_start();
 
-            // $_SESSION["logged_out"];
-
-            if ($_SESSION["logged_out"]) {
-                echo '
-                <button type="button" class="btn btn-light">
-                    Helpdesk
-                </button>  
-                ';
-            } else {
-                echo '
+        if ($_SESSION["logged_out"]) {
+            // No user logged in
+            echo '
+                <div class="navbar-nav ms-auto">
+                    <a class="btn btn-light mx-2" href="registration.php">Register</a>
+                    <a class="btn btn-light mx-2" href="userlogin.php">Login</a>
+                </div>
+            ';
+        } else {
+            // User logged in
+            echo '
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarNav">
@@ -72,17 +73,16 @@
                         <button class="btn btn-light mx-2" name="logout">Logout</button>
                     </ul>
                 </div>
-                ';
+            ';
 
-                if(isset($_POST['logout'])) {
-                    $_SESSION['logged_out'] = true;
-                    header("Location: login.php");
-                }
+            if (isset($_POST['logout'])) {
+                $_SESSION['logged_out'] = true;
+                header("Location: catalog.php");
             }
-
-            ?>
-        </form>
-    </nav>
+        }
+        ?>
+    </form>
+</nav>
     <?php include "sidebar.php" ?>
 
 </body>

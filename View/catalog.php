@@ -1,7 +1,7 @@
 <?php
 // Include the necessary files and classes
 require_once "../config/autoload.php";
-include "adminnavigation.php";
+include "usernavigation.php";
 // Create an instance of the ProductController
 $productController = new ProductController();
 

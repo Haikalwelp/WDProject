@@ -18,71 +18,63 @@
         integrity="sha384-Y4oOpwW3duJdCWv5ly8SCFYWqFDsfob/3GkgExXKV4idmbt98QcxXYs9UoXAB7BZ"
         crossorigin="anonymous"></script>
 
-    <?php
-    session_start();
-    $show_login;
+        <?php
+session_start();
 
-    if ($_COOKIE['user_data']) {
-        $data = json_decode($_COOKIE['user_data'], true);
+if (isset($_POST['logout'])) {
+    // Destroy the session
+    session_destroy();
 
-        if ($data['login'] == true) {
-            $show_login = true;
-        }
-    }
-    ?>
+    // Unset the user_data cookie
+    setcookie('user_data', '', time() - 3600, '/'); // Set the expiration time to a past value
 
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm py-3 px-2 fixed-top z-3">
-        <form class="container-fluid" action="" method="post">
-            <a class="btn btn-outline-secondary me-3" data-bs-toggle="offcanvas" href="#offcanvas" role="button"
-                aria-controls="offcanvas">
-                <!-- Link with href -->
-                <span class="navbar-toggler-icon"></span>
-            </a>
+    // Redirect to the login page
+    header("Location: adminlogin.php");
+    exit();
+}
+?>
 
-            <a class="navbar-brand" href="#"><b>Megah Holdings</b></a>
-            <?php
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm py-3 px-2 fixed-top z-3">
+    <form class="container-fluid" action="" method="post">
+        <a class="btn btn-outline-secondary me-3" data-bs-toggle="offcanvas" href="#offcanvas" role="button"
+            aria-controls="offcanvas">
+            <!-- Link with href -->
+            <span class="navbar-toggler-icon"></span>
+        </a>
 
-      
+        <a class="navbar-brand" href="#"><b>Megah Holdings</b></a>
 
-            // $_SESSION["logged_out"];
+        <?php if (isset($_SESSION['logged_out']) && !$_SESSION['logged_out']) : ?>
 
-            if ($_SESSION["logged_out"]) {
-                echo '
-                <button type="button" class="btn btn-light">
-                    Helpdesk
-                </button>  
-                ';
-            } else {
-                echo '
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                 aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarNav">
-                    <ul class="navbar-nav ms-auto"> <!-- Added ms-auto class -->
-                        <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="adminpage.php">Dashboard</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Inbox</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Profile</a>
-                        </li>
-                        <button class="btn btn-light mx-2" name="logout">Logout</button>
-                    </ul>
-                </div>
-                ';
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto"> <!-- Added ms-auto class -->
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="adminpage.php">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Inbox</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Profile</a>
+                    </li>
+                    <button class="btn btn-light mx-2" name="logout">Logout</button>
+                </ul>
+            </div>
 
-                if(isset($_POST['logout'])) {
-                    $_SESSION['logged_out'] = true;
-                    header("Location: adminlogin.php");
-                }
-            }
+        <?php else : ?>
 
-            ?>
-        </form>
-    </nav>
+            <button type="button" class="btn btn-light">
+                Helpdesk
+            </button>
+
+        <?php endif; ?>
+
+    </form>
+</nav>
     <?php include "sidebar.php" ?>
 
 </body>
