@@ -1,3 +1,13 @@
+<?php
+session_start();
+
+// Check if admin is not logged in
+if (!isset($_SESSION['admin_logged_out']) || $_SESSION['admin_logged_out']) {
+    echo '<script>alert("Please login as admin first!"); window.location.href = "adminlogin.php";</script>';
+    exit();
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en" data-bs-theme="dark">
 
