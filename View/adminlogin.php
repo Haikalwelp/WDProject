@@ -4,36 +4,39 @@ session_start();
 include "../config/autoload.php";
 $show_error = false;
 
-if (isset($_SESSION['logged_out']) && !$_SESSION['logged_out']) {
+if (isset($_SESSION['admin_logged_out']) && !$_SESSION['admin_logged_out']) {
     header("Location: adminpage.php");
     exit();
 }
+
+$adminController = new AdminController();
 
 if (isset($_POST['Login'])) {
     // Retrieve the submitted email and password
     $email = $_POST['email'];
     $password = $_POST['password'];
 
-    // Assuming the getAdminController method is part of your class
-    $adminController = new AdminController();
+    // Check the admin credentials using the AdminController
     $admin = $adminController->getAdminController($email, $password);
 
     if ($admin) {
         // Admin authentication successful
-        $userData = [
+        $_SESSION['admin_logged_out'] = false;
+
+        // Create the admin data array for the cookie
+        $adminData = [
             'login' => true,
-            // Other relevant user data
+            // Other relevant admin data
         ];
 
-        // Set the cookie with the user data
-        setcookie('user_data', json_encode($userData), time() + (86400 * 30), '/'); // Adjust the expiration time as needed
+        // Set the cookie with the admin data
+        setcookie('admin_data', json_encode($adminData), time() + (86400 * 30), '/');
 
-        $_SESSION['logged_out'] = false;
-        header("Location: adminpage.php");
+        header("Location: adminpage.php"); // Redirect to admin page
         exit();
     } else {
         // Admin authentication failed
-        $_SESSION['logged_out'] = true;
+        $_SESSION['admin_logged_out'] = true;
         $show_error = true;
     }
 }

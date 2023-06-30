@@ -21,7 +21,7 @@
         session_destroy();
 
         // Unset the user_data cookie
-        setcookie('user_data', '', time() - 3600, '/'); // Set the expiration time to a past value
+        setcookie('admin_data', '', time() - 3600, '/'); // Set the expiration time to a past value
 
         // Redirect to the login page
         header("Location: adminlogin.php");
@@ -38,13 +38,13 @@
 
             <a class="navbar-brand" href="#"><b>Megah Holdings</b></a>
 
-            <?php if (isset($_SESSION['logged_out']) && !$_SESSION['logged_out']) : ?>
+            <?php if (isset($_SESSION['admin_logged_out']) && !$_SESSION['admin_logged_out']) : ?>
 
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarNav">
-                    <ul class="navbar-nav ms-auto"> <!-- Added ms-auto class -->
+                    <ul class="navbar-nav ms-auto">
                         <li class="nav-item">
                             <a class="nav-link active" aria-current="page" href="adminpage.php">Dashboard</a>
                         </li>
@@ -54,7 +54,9 @@
                         <li class="nav-item">
                             <a class="nav-link" href="#">Profile</a>
                         </li>
-                        <button class="btn btn-light mx-2" name="logout">Logout</button>
+                        <li class="nav-item">
+                            <button class="btn btn-light mx-2" name="logout">Logout</button>
+                        </li>
                     </ul>
                 </div>
 
@@ -63,7 +65,6 @@
                 <button type="button" class="btn btn-light" onclick="window.location.href = 'catalog.php'">
                     Store Page
                 </button>
-
 
             <?php endif; ?>
 

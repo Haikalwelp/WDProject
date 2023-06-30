@@ -4,8 +4,8 @@ session_start();
 include "../config/autoload.php";
 $show_error = false;
 
-if (isset($_SESSION['logged_out']) && !$_SESSION['logged_out']) {
-    header("Location: adminpage.php");
+if (isset($_SESSION['user_logged_out']) && !$_SESSION['user_logged_out']) {
+    header("Location: catalog.php");
     exit();
 }
 
@@ -21,22 +21,22 @@ if (isset($_POST['Login'])) {
 
     if ($user) {
         // User authentication successful
-        $_SESSION['logged_out'] = false;
-        
+        $_SESSION['user_logged_out'] = false;
+
         // Create the user data array for the cookie
         $userData = [
             'login' => true,
             // Other relevant user data
         ];
-        
+
         // Set the cookie with the user data
         setcookie('user_data', json_encode($userData), time() + (86400 * 30), '/');
-        
+
         header("Location: catalog.php"); // Redirect to user page or any other desired page
         exit();
     } else {
         // User authentication failed
-        $_SESSION['logged_out'] = true;
+        $_SESSION['user_logged_out'] = true;
         $show_error = true;
     }
 }

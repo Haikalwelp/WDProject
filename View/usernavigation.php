@@ -19,55 +19,57 @@
         crossorigin="anonymous"></script>
 
     <?php
+    session_start();
 
-    $show_login;
+    $show_login = false;
 
-    if ($_COOKIE['user_data']) {
+    if (isset($_COOKIE['user_data'])) {
         $data = json_decode($_COOKIE['user_data'], true);
 
         if ($data['login'] == true) {
             $show_login = true;
         }
     }
+
+    $logged_out = isset($_SESSION['user_logged_out']) && $_SESSION['user_logged_out'];
+
     ?>
 
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm py-3 px-2 fixed-top z-3">
-    <form class="container-fluid" action="" method="post">
-        <a class="btn btn-outline-secondary me-3" data-bs-toggle="offcanvas" href="#offcanvasExample" role="button"
-            aria-controls="offcanvasExample">
-            <!-- Link with href -->
-            <span class="navbar-toggler-icon"></span>
-        </a>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm py-3 px-2 fixed-top z-3">
+        <form class="container-fluid" action="" method="post">
+            <a class="btn btn-outline-secondary me-3" data-bs-toggle="offcanvas" href="#offcanvasExample" role="button"
+                aria-controls="offcanvasExample">
+                <!-- Link with href -->
+                <span class="navbar-toggler-icon"></span>
+            </a>
 
-        <a class="navbar-brand" href="#"><b>Megah Holdings</b></a>
+            <a class="navbar-brand" href="#"><b>Megah Holdings</b></a>
 
-        <?php
-        session_start();
+            <?php
+            if ($logged_out) {
+                // No user logged in
+                echo '
+        <div class="navbar-nav ms-auto">
+            <a class="btn btn-light mx-2" href="registration.php">Register</a>
+            <a class="btn btn-light mx-2" href="userlogin.php">Login</a>
+            <button type="button" class="btn btn-secondary" onclick="window.location.href = \'adminlogin.php\'">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-fill-lock" viewBox="0 0 16 16">
+                    <path d="M11 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm-9 8c0 1 1 1 1 1h5v-1a1.9 1.9 0 0 1 .01-.2 4.49 4.49 0 0 1 1.534-3.693C9.077 9.038 8.564 9 8 9c-5 0-6 3-6 4Zm7 0a1 1 0 0 1 1-1v-1a2 2 0 1 1 4 0v1a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1v-2Zm3-3a1 1 0 0 0-1 1v1h2v-1a1 1 0 0 0-1-1Z"></path>
+                </svg>
+            </button>
+        </div>
+    ';
 
-        if ($_SESSION["logged_out"]) {
-            // No user logged in
-            echo '
-    <div class="navbar-nav ms-auto">
-        <a class="btn btn-light mx-2" href="registration.php">Register</a>
-        <a class="btn btn-light mx-2" href="userlogin.php">Login</a>
-        <button type="button" class="btn btn-secondary" onclick="window.location.href = \'adminlogin.php\'">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-fill-lock" viewBox="0 0 16 16">
-                <path d="M11 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm-9 8c0 1 1 1 1 1h5v-1a1.9 1.9 0 0 1 .01-.2 4.49 4.49 0 0 1 1.534-3.693C9.077 9.038 8.564 9 8 9c-5 0-6 3-6 4Zm7 0a1 1 0 0 1 1-1v-1a2 2 0 1 1 4 0v1a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1v-2Zm3-3a1 1 0 0 0-1 1v1h2v-1a1 1 0 0 0-1-1Z"></path>
-            </svg>
-        </button>
-    </div>
-';
-
-        } else {
-            // User logged in
-            echo '
+            } else {
+                // User logged in
+                echo '
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                     aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav ms-auto"> <!-- Added ms-auto class -->
-                        <li class="nav-item">
+                        <li class="nav-item"> 
                             <a class="nav-link" href="#">Profile</a>
                         </li>
                         <li class="nav-item">
@@ -83,17 +85,16 @@
                 </div>
             ';
 
-            if (isset($_POST['logout'])) {
-                $_SESSION['logged_out'] = true;
-                header("Location: catalog.php");
+                if (isset($_POST['logout'])) {
+                    $_SESSION['user_logged_out'] = true;
+                    header("Location: catalog.php");
+                }
             }
-        }
-        ?>
-    </form>
-</nav>
+            ?>
+        </form>
+    </nav>
     <?php include "sidebar.php" ?>
 
 </body>
 
 </html>
-
