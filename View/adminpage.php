@@ -52,17 +52,6 @@ if (!isset($_SESSION['admin_logged_out']) || $_SESSION['admin_logged_out']) {
 
                     <div class="col d-flex flex-column gap-2">
                         <button type="button" class="btn btn-primary">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-fill-lock" viewBox="0 0 16 16">
-                                <path d="M11 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm-9 8c0 1 1 1 1 1h5v-1a1.9 1.9 0 0 1 .01-.2 4.49 4.49 0 0 1 1.534-3.693C9.077 9.038 8.564 9 8 9c-5 0-6 3-6 4Zm7 0a1 1 0 0 1 1-1v-1a2 2 0 1 1 4 0v1a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1v-2Zm3-3a1 1 0 0 0-1 1v1h2v-1a1 1 0 0 0-1-1Z"></path>
-                            </svg>
-                            Manage Admins
-                        </button>
-                        <h4 class="fw-semibold mb-0 text-body-emphasis">Manage Admins</h4>
-                        <p class="text-body-secondary">Add, Remove, Update Admin accounts</p>
-                    </div>
-
-                    <div class="col d-flex flex-column gap-2">
-                        <button type="button" class="btn btn-primary">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-basket-fill" viewBox="0 0 16 16">
                                 <path d="M5.071 1.243a.5.5 0 0 1 .858.514L3.383 6h9.234L10.07 1.757a.5.5 0 1 1 .858-.514L13.783 6H15.5a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5H15v5a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V9H.5a.5.5 0 0 1-.5-.5v-2A.5.5 0 0 1 .5 6h1.717L5.07 1.243zM3.5 10.5a.5.5 0 1 0-1 0v3a.5.5 0 0 0 1 0v-3zm2.5 0a.5.5 0 1 0-1 0v3a.5.5 0 0 0 1 0v-3zm2.5 0a.5.5 0 1 0-1 0v3a.5.5 0 0 0 1 0v-3zm2.5 0a.5.5 0 1 0-1 0v3a.5.5 0 0 0 1 0v-3zm2.5 0a.5.5 0 1 0-1 0v3a.5.5 0 0 0 1 0v-3z"></path>
                             </svg>
@@ -70,16 +59,6 @@ if (!isset($_SESSION['admin_logged_out']) || $_SESSION['admin_logged_out']) {
                         </button>
                         <h4 class="fw-semibold mb-0 text-body-emphasis">Manage Orders</h4>
                         <p class="text-body-secondary">Update Order Status etc.</p>
-                    </div>
-
-                    <div class="col d-flex flex-column gap-2">
-                        <div class="feature-icon-small d-inline-flex align-items-center justify-content-center text-bg-primary bg-gradient fs-4 rounded-3">
-                            <svg class="bi" width="1em" height="1em">
-                                <use xlink:href="#table"></use>
-                            </svg>
-                        </div>
-                        <h4 class="fw-semibold mb-0 text-body-emphasis">Featured title</h4>
-                        <p class="text-body-secondary">Paragraph of text beneath the heading to explain the heading.</p>
                     </div>
                 </div>
             </div>

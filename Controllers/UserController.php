@@ -13,6 +13,11 @@ class UserController extends User {
     public function addUserController($username, $email, $password) {
         return $this->addUser($username, $email, $password);
     }
+
+    public function getUserByIdController($userId)
+    {
+        return $this->getUserById($userId);
+    }
 }
 
 ?>

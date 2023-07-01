@@ -45,6 +45,22 @@ class User extends Connection
             return false;
         }
     }
+
+    public function getUserById($userId)
+    {
+        $connection = $this->getConnection();
+
+        $query = "SELECT * FROM user WHERE userId = '$userId'";
+
+        $result = mysqli_query($connection, $query);
+
+        if (mysqli_num_rows($result) == 0) {
+            return false;
+        } else {
+            return $result;
+        }
+    }
+
 }
 
 ?>

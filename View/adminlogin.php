@@ -19,9 +19,14 @@ if (isset($_POST['Login'])) {
     // Check the admin credentials using the AdminController
     $admin = $adminController->getAdminController($email, $password);
 
-    if ($admin) {
+    if ($admin->num_rows > 0) {
         // Admin authentication successful
         $_SESSION['admin_logged_out'] = false;
+        $adminData = $admin->fetch_assoc();
+        $adminId = $adminData['adminid'];
+        
+        // Store the adminid in the session
+        $_SESSION['adminId'] = $adminId;
 
         // Create the admin data array for the cookie
         $adminData = [
