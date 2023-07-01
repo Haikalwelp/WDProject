@@ -2,6 +2,7 @@
 // Include the necessary files and classes
 require_once "../config/autoload.php";
 include "usernavigation.php";
+
 // Create an instance of the ProductController
 $productController = new ProductController();
 
@@ -11,38 +12,32 @@ $products = $productController->getProductsController();
 // Start the session
 session_start();
 
-// Check if the cart array exists in the session, if not, initialize it
-if (!isset($_SESSION["cart_item"])) {
-    $_SESSION["cart_item"] = array();
-}
+// Check if the addToCart form is submitted
+if (isset($_POST['addToCart'])) {
+    // Retrieve the product ID
+    $productId = $_POST['productId'];
 
-// Process the add to cart action
-if (isset($_POST["addToCart"])) {
-    $productId = $_POST["productId"];
-    $product = $productController->getProductIdByController($productId);
-    
-    // Check if the product exists
-    if ($product) {
-        // Create an item array with product details
-        $itemArray = array(
-            "id" => $product['productid'],
-            "name" => $product['product_name'],
-            "price" => $product['selling'],
-            "quantity" => 1
-        );
-        
-        // Check if the product is already in the cart
-        if (isset($_SESSION["cart_item"][$productId])) {
-            // Update the quantity if the product is already in the cart
-            $_SESSION["cart_item"][$productId]["quantity"] += 1;
-        } else {
-            // Add the product to the cart
-            $_SESSION["cart_item"][$productId] = $itemArray;
-        }
-        
-        // Display the Bootstrap alert for "Added to Cart"
-        echo '<div class="alert alert-success" role="alert">Product added to cart successfully!</div>';
+    // Retrieve the logged-in user's ID
+    $userId = $_SESSION['userId'];
+
+    // Check if the cart array for the user exists
+    if (!isset($_SESSION['cart'][$userId]) || !is_array($_SESSION['cart'][$userId])) {
+        $_SESSION['cart'][$userId] = array();
     }
+
+    // Add the product to the cart for the logged-in user
+    $_SESSION['cart'][$userId][] = $productId;
+
+    // Set the success message
+    $_SESSION['successMessage'] = "Item added to cart!";
+
+    // Redirect to the catalog page after 2 seconds
+    echo '<script>
+        setTimeout(function() {
+            window.location.href = "catalog.php";
+        });
+    </script>';
+    exit();
 }
 ?>
 
@@ -62,6 +57,12 @@ if (isset($_POST["addToCart"])) {
 <body>
     <div class="container">
         <h1 class="mt-4">Product Information</h1>
+        <?php if (isset($_SESSION['successMessage'])): ?>
+            <div class="alert alert-success" role="alert">
+                <?php echo $_SESSION['successMessage']; ?>
+            </div>
+            <?php unset($_SESSION['successMessage']); ?>
+        <?php endif; ?>
         <div class="row">
             <?php foreach ($products as $product): ?>
             <div class="col-md-4">
@@ -88,5 +89,6 @@ if (isset($_POST["addToCart"])) {
         </div>
     </div>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.min.js"></script>
+   
 </body>
 </html>

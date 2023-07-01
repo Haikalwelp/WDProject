@@ -1,3 +1,4 @@
+<?php session_start(); ?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -25,7 +26,7 @@
         crossorigin="anonymous"></script>
 
     <?php
-    session_start();
+    
 
     $show_login = false;
 
@@ -49,7 +50,7 @@
                 <span class="navbar-toggler-icon"></span>
             </a>
 
-            <a class="navbar-brand" href="#"><b>Megah Holdings</b></a>
+            <a class="navbar-brand" href="catalog.php"><b>Megah Holdings</b></a>
 
             <?php
             if ($logged_out || !$show_login) {
@@ -76,13 +77,13 @@
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav ms-auto"> <!-- Added ms-auto class -->
                         <li class="nav-item"> 
-                            <a class="nav-link" href="#">Profile</a>
+                            <a class="nav-link" href="userupdate.php"><i class="fa-solid fa-user"></i> Profile</a>
                         </li>
                         <li class="nav-item"> 
                         <a class="nav-link" href="catalog.php"><i class="fas fa-th-list mr-2"></i> Catalog</a>
                         </li>
                         <li class="nav-item"> 
-                        <a class="nav-link" href="cart.php"><i class="fas fa-shopping-cart"></i> <span id="cart-item" class="badge badge-danger"></span></a>
+                        <a class="nav-link" href="cart.php"><i class="fas fa-shopping-cart"></i> Cart</a>
                         </li>                 
                         <button class="btn btn-light mx-2" name="logout">Logout</button>
                     </ul>

@@ -50,14 +50,31 @@ class User extends Connection
     {
         $connection = $this->getConnection();
 
-        $query = "SELECT * FROM user WHERE userId = '$userId'";
+        $query = "SELECT * FROM user WHERE userid = ?";
+        $stmt = $connection->prepare($query);
+        $stmt->bind_param("i", $userId);
+        $stmt->execute();
+        $result = $stmt->get_result();
+    
+        if ($result->num_rows > 0) {
+            return $result->fetch_assoc(); 
+        } else {
+            return false;
+        }
+    }
+
+    public function insertUserbyId($userId, $email, $password, $username)
+    {
+        $connection = $this->getConnection();
+
+        $query = "UPDATE user SET userEmail = '$email', userPassword = '$password', username = '$username' WHERE userid = $userId";
 
         $result = mysqli_query($connection, $query);
 
-        if (mysqli_num_rows($result) == 0) {
-            return false;
+        if ($result) {
+            return true;
         } else {
-            return $result;
+            return false;
         }
     }
 

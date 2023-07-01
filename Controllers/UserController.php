@@ -18,6 +18,12 @@ class UserController extends User {
     {
         return $this->getUserById($userId);
     }
+
+    public function insertUserByIdController($userId, $email, $password, $username) {
+        return $this->insertUserbyId($userId, $email, $password, $username);
+    }
 }
+
+
 
 ?>

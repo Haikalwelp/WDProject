@@ -15,10 +15,21 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.min.js" integrity="sha384-Y4oOpwW3duJdCWv5ly8SCFYWqFDsfob/3GkgExXKV4idmbt98QcxXYs9UoXAB7BZ" crossorigin="anonymous"></script>
 
     <?php
+    require_once "../config/autoload.php";
     session_start();
 
+    $adminController = new AdminController();
+
+    // Check if the admin is logged in
+    if (isset($_SESSION['admin_logged_out']) && !$_SESSION['admin_logged_out'] && isset($_SESSION['adminId'])) {
+        // Get the admin's username using the controller
+        $adminId = $_SESSION['adminId'];
+        $admin = $adminController->getAdminByIdController($adminId);
+        $adminUsername = $admin['adminUser'];
+    }
+
     if (isset($_POST['logout'])) {
-        // Destroy the session
+        // Destroy the session  
         session_destroy();
 
         // Unset the user_data cookie
@@ -50,8 +61,7 @@
                             <a class="nav-link" aria-current="page" href="adminpage.php"><i class="fa-solid fa-house"></i> Dashboard</a>
                         </li>
                         <li class="nav-item">
-                        <a class="nav-link" href="editadmin.php"><i class="fa-solid fa-user"></i> Profile</a>
-
+                            <a class="nav-link" href="adminupdate.php"><i class="fa-solid fa-user"></i> <?php echo $adminUsername; ?></a>
                         </li>
                         <li class="nav-item">
                             <button class="btn btn-light mx-2" name="logout">Logout</button>

@@ -155,4 +155,39 @@ class Product extends Connection
         return false;
     }
 
+    public function getProductById($productId)
+    {
+        $connection = $this->getConnection();
+    
+        // Assuming the table name is 'products'
+        $query = "SELECT productid, product_name, category, selling, balance, productphoto FROM products WHERE productid = ?";
+        $statement = mysqli_prepare($connection, $query);
+    
+        if ($statement) {
+            mysqli_stmt_bind_param($statement, 'i', $productId);
+            mysqli_stmt_execute($statement);
+    
+            mysqli_stmt_bind_result($statement, $productid, $product_name, $category, $selling, $balance, $productphoto);
+    
+            if (mysqli_stmt_fetch($statement)) {
+                // Handle the productphoto column
+                $productphoto = base64_encode($productphoto);
+    
+                $result = [
+                    'productid' => $productid,
+                    'product_name' => $product_name,
+                    'category' => $category,
+                    'selling' => $selling,
+                    'balance' => $balance,
+                    'productphoto' => $productphoto
+                ];
+    
+                return $result;
+            }
+        }
+    
+        return false;
+    }
+    
+
 }

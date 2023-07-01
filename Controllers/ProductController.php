@@ -1,6 +1,6 @@
 <?php
 require_once "../config/autoload.php";
-require_once "../config/autoload.php";
+
 
 class ProductController extends Product
 {
@@ -27,6 +27,11 @@ class ProductController extends Product
     public function getProductIdByController($productId)
     {
         return $this->getProductIdByController($productId);
+    }
+
+    public function getProductByIdController($productId)
+    {
+        return $this->getProductById($productId);
     }
 }
 

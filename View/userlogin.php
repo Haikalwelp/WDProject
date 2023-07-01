@@ -19,19 +19,24 @@ if (isset($_POST['Login'])) {
     // Check the user credentials using the UserController
     $user = $userController->getUserController($email, $password);
 
-    if ($user) {
-        // User authentication successful
+    if ($user->num_rows > 0) {
+        // Admin authentication successful
         $_SESSION['user_logged_out'] = false;
-
+        $userData = $user->fetch_assoc();
+        $userId = $userData['userid'];
+    
+        // Assign the user ID to the session variable
+        $_SESSION['userId'] = $userId;
+    
         // Create the user data array for the cookie
         $userData = [
             'login' => true,
             // Other relevant user data
         ];
-
+    
         // Set the cookie with the user data
         setcookie('user_data', json_encode($userData), time() + (86400 * 30), '/');
-
+    
         header("Location: catalog.php"); // Redirect to user page or any other desired page
         exit();
     } else {

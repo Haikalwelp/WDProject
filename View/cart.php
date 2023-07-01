@@ -1,108 +1,137 @@
 <?php
-// Include the necessary files and classes
-require_once "../config/autoload.php";
+session_start();
+
+include "../config/autoload.php";
 include "usernavigation.php";
+
 // Create an instance of the ProductController
 $productController = new ProductController();
 
-// Start the session
-session_start();
+// Retrieve the logged-in user's ID
+$userId = $_SESSION['userId'];
 
-// Check if the cart array exists in the session, if not, initialize it
-if (!isset($_SESSION["cart_item"])) {
-    $_SESSION["cart_item"] = array();
+// Retrieve the logged-in user's details
+$userController = new UserController();
+$user = $userController->getUserByIdController($userId);
+
+// Retrieve the user's name and email
+$name = $user['username'];
+$email = $user['userEmail'];
+
+// Retrieve the cart items for the logged-in user
+$cartItems = [];
+if (isset($_SESSION['cart'][$userId])) {
+    foreach ($_SESSION['cart'][$userId] as $productId) {
+        $cartItems[] = $productController->getProductByIdController($productId);
+    }
 }
 
-// Process the remove action
-if (isset($_GET["action"])) {
-    if ($_GET["action"] === "remove" && isset($_GET["code"])) {
-        $productId = $_GET["code"];
+// Calculate the total price
+$totalPrice = 0;
+foreach ($cartItems as $item) {
+    $totalPrice += $item['selling'];
+}
 
-        // Check if the product is in the cart
-        if (isset($_SESSION["cart_item"][$productId])) {
-            // Remove the product from the cart
-            unset($_SESSION["cart_item"][$productId]);
-
-            // Redirect back to the shopping cart page
-            header("Location: cart.php");
-            exit();
-        }
-    } elseif ($_GET["action"] === "empty") {
-        // Empty the cart
-        unset($_SESSION["cart_item"]);
-
-        // Redirect back to the shopping cart page
-        header("Location: cart.php");
-        exit();
+if (isset($_POST['clearCart'])) {
+    // Clear the cart items for the logged-in user
+    if (isset($_SESSION['userId'])) {
+        $userId = $_SESSION['userId'];
+        unset($_SESSION['cart'][$userId]);
+        echo '<script>
+        setTimeout(function() {
+            window.location.href = "cart.php";
+        });
+    </script>';
     }
 }
 ?>
 
 <!DOCTYPE html>
 <html lang="en" data-bs-theme="dark">
-<html>
+
 <head>
-    <title>Shopping Cart</title>
+    <title>Checkout</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/css/bootstrap.min.css">
     <style>
         .card-img-top {
             object-fit: cover;
-            height: 350px;
+            height: 150px;
         }
     </style>
 </head>
+
 <body>
+    <br><br>
     <div class="container">
-        <h1 class="mt-4">Shopping Cart</h1>
-        <?php if (empty($_SESSION["cart_item"])): ?>
-            <p>Your cart is empty.</p>
-        <?php else: ?>
-            <table class="table mt-4">
-                <thead>
-                    <tr>
-                        <th>Product</th>
-                        <th>Price</th>
-                        <th>Quantity</th>
-                        <th>Total</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php
-                    $totalPrice = 0;
-                    foreach ($_SESSION["cart_item"] as $productId => $item):
-                        $product = $productController->getProductIdByController($productId);
-                        if (!$product) {
-                            continue;
-                        }
-                        $productPrice = $product['selling'];
-                        $productName = $product['product_name'];
-                        $quantity = $item['quantity'];
-                        $itemTotal = $productPrice * $quantity;
-                        $totalPrice += $itemTotal;
-                        ?>
-                        <tr>
-                            <td><?php echo $productName; ?></td>
-                            <td>RM<?php echo $productPrice; ?></td>
-                            <td><?php echo $quantity; ?></td>
-                            <td>RM<?php echo $itemTotal; ?></td>
-                            <td>
-                                <a href="cart.php?action=remove&code=<?php echo $productId; ?>" class="btn btn-danger btn-sm">Remove</a>
-                            </td>
-                        </tr>
-                    <?php endforeach; ?>
-                    <tr>
-                        <td colspan="3" align="right">Total:</td>
-                        <td colspan="2">RM<?php echo $totalPrice; ?></td>
-                    </tr>
-                </tbody>
-            </table>
-            <div class="mt-4">
-                <a href="cart.php?action=empty" class="btn btn-secondary">Clear Cart</a>
-                <a href="catalog.php" class="btn btn-primary">Continue Shopping</a>
+        <h1 class="mt-4">Checkout</h1>
+        <div class="row">
+            <div class="col-md-8">
+                <div class="card mt-4">
+                    <div class="card-body">
+                        <h5 class="card-title">Cart Items</h5>
+                        <?php foreach ($cartItems as $item) : ?>
+                            <div class="row mb-3">
+                                <div class="col-md-3">
+                                    <img src="data:image/jpeg;base64,<?php echo $item['productphoto']; ?>" class="card-img-top" alt="Product Image">
+                                </div>
+                                <div class="col-md-9">
+                                    <h6><?php echo $item['product_name']; ?></h6>
+                                    <p>Category: <?php echo $item['category']; ?></p>
+                                    <p>Price: RM<?php echo $item['selling']; ?></p>
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
+                        <!-- Clear cart button -->
+                        <div class="mt-4">
+                            <form method="post">
+                                <button type="submit" name="clearCart" class="btn btn-danger">Clear Cart</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
             </div>
-        <?php endif; ?>
+            <div class="col-md-4">
+                <div class="card mt-4">
+                    <div class="card-body">
+                        <h5 class="card-title">Total Price</h5>
+                        <h6>RM <?php echo $totalPrice; ?></h6>
+                    </div>
+                </div>
+                <div class="card mt-4">
+                    <div class="card-body">
+                        <h5 class="card-title">Checkout Form</h5>
+                        <form>
+                            <div class="mb-3">
+                                <label for="name" class="form-label">Name</label>
+                                <input type="text" class="form-control" id="name" name="name" value="<?php echo $name; ?>" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Email</label>
+                                <input type="email" class="form-control" id="email" name="email" value="<?php echo $email; ?>" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="address" class="form-label">Address</label>
+                                <textarea class="form-control" id="address" name="address" rows="3" required></textarea>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Payment Method</label>
+                                <div>
+                                    <input type="radio" id="cod" name="paymentMethod" value="cod" checked>
+                                    <label for="cod">Cash On Delivery (COD)</label>
+                                </div>
+                                <div>
+                                    <input type="radio" id="card" name="paymentMethod" value="card" disabled>
+                                    <label for="card">Debit/Credit Card</label>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Place Order</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.min.js"></script>
 </body>
+
 </html>
