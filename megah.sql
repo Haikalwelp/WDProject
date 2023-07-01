@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 28, 2023 at 05:49 AM
+-- Generation Time: Jul 01, 2023 at 04:41 PM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 8.1.6
 
@@ -29,6 +29,7 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `admin` (
   `adminid` int(11) NOT NULL,
+  `adminUser` varchar(666) NOT NULL,
   `adminEmail` varchar(255) DEFAULT NULL,
   `adminPassword` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -37,20 +38,21 @@ CREATE TABLE `admin` (
 -- Dumping data for table `admin`
 --
 
-INSERT INTO `admin` (`adminid`, `adminEmail`, `adminPassword`) VALUES
-(1, 'haikalultraman123@gmail.com', '12345');
+INSERT INTO `admin` (`adminid`, `adminUser`, `adminEmail`, `adminPassword`) VALUES
+(1, 'Haikalisk', 'haikalhebat@gmail.com', 'hilmihensem');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `cart`
+-- Table structure for table `orders`
 --
 
-CREATE TABLE `cart` (
-  `cartid` int(11) NOT NULL,
-  `productid` int(11) NOT NULL,
+CREATE TABLE `orders` (
+  `orderid` int(11) NOT NULL,
   `userid` int(11) NOT NULL,
-  `quantity` int(11) NOT NULL
+  `address` varchar(666) NOT NULL,
+  `paymentmethod` varchar(666) NOT NULL,
+  `orderstatus` varchar(666) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -116,7 +118,7 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`userid`, `username`, `userEmail`, `userPassword`) VALUES
-(1, 'haikalisk', 'haikalultraman123@gmail.com', 'spidey12');
+(1, 'Haikal', 'haikalhebat@gmail.com', 'hilmihensem');
 
 --
 -- Indexes for dumped tables
@@ -129,11 +131,10 @@ ALTER TABLE `admin`
   ADD PRIMARY KEY (`adminid`);
 
 --
--- Indexes for table `cart`
+-- Indexes for table `orders`
 --
-ALTER TABLE `cart`
-  ADD PRIMARY KEY (`cartid`),
-  ADD KEY `productid` (`productid`),
+ALTER TABLE `orders`
+  ADD PRIMARY KEY (`orderid`),
   ADD KEY `userid` (`userid`);
 
 --
@@ -159,10 +160,10 @@ ALTER TABLE `admin`
   MODIFY `adminid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
--- AUTO_INCREMENT for table `cart`
+-- AUTO_INCREMENT for table `orders`
 --
-ALTER TABLE `cart`
-  MODIFY `cartid` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `orders`
+  MODIFY `orderid` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `products`
@@ -174,18 +175,17 @@ ALTER TABLE `products`
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `userid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `userid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- Constraints for dumped tables
 --
 
 --
--- Constraints for table `cart`
+-- Constraints for table `orders`
 --
-ALTER TABLE `cart`
-  ADD CONSTRAINT `cart_ibfk_1` FOREIGN KEY (`productid`) REFERENCES `products` (`productid`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `cart_ibfk_2` FOREIGN KEY (`userid`) REFERENCES `user` (`userid`) ON UPDATE CASCADE;
+ALTER TABLE `orders`
+  ADD CONSTRAINT `orders_ibfk_1` FOREIGN KEY (`userid`) REFERENCES `user` (`userid`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
