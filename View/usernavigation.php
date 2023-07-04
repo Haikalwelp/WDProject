@@ -92,7 +92,7 @@
                     $_SESSION['user_logged_out'] = true;
                     unset($_COOKIE['user_data']);
                     setcookie('user_data', null, -1, '/');
-                    header('Location: ' . $_SERVER['REQUEST_URI']);
+                    header("Location: catalog.php");
                     exit;
                 }
             }

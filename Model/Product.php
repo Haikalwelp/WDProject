@@ -57,33 +57,33 @@ class Product extends Connection
     return false;
 }
 
+    public function editProduct($oldProductId, $newProductId, $name, $category, $sellingPrice, $balance, $productPhoto)
+{
+    $connection = $this->getConnection();
 
-    public function editProduct($productId, $name, $category, $sellingPrice, $balance, $productPhoto)
-    {
-        $connection = $this->getConnection();
+    // Process the uploaded product photo
+    $photo_tmp_name = $productPhoto['tmp_name'];
+    $photo_error = $productPhoto['error'];
 
-        // Process the uploaded product photo
-        $photo_tmp_name = $productPhoto['tmp_name'];
-        $photo_error = $productPhoto['error'];
+    // Convert the photo to binary data
+    $photo = '';
 
-        // Convert the photo to binary data
-        $photo = '';
-
-        if ($photo_error === UPLOAD_ERR_OK) {
-            $photo = file_get_contents($photo_tmp_name);
-            $photo = addslashes($photo);
-        }
-
-        // Update the product details in the database
-        $query = "UPDATE products SET product_name = '$name', category = '$category', selling = '$sellingPrice', balance = '$balance', productphoto = '$photo' WHERE productid = '$productId'";
-        $result = mysqli_query($connection, $query);
-
-        if ($result) {
-            return true; // Product updated successfully
-        } else {
-            return false; // Failed to update the product
-        }
+    if ($photo_error === UPLOAD_ERR_OK) {
+        $photo = file_get_contents($photo_tmp_name);
+        $photo = addslashes($photo);
     }
+
+    // Update the product details in the database
+    $query = "UPDATE products SET productid = '$newProductId', product_name = '$name', category = '$category', selling = '$sellingPrice', balance = '$balance', productphoto = '$photo' WHERE productid = '$oldProductId'";
+    $result = mysqli_query($connection, $query);
+
+    if ($result) {
+        return true; // Product updated successfully
+    } else {
+        return false; // Failed to update the product
+    }
+}
+
 
 
     public function addProduct($productData)
@@ -91,6 +91,7 @@ class Product extends Connection
         $connection = $this->getConnection();
 
         // Retrieve form data
+        $productid = $productData['productid'];
         $product_name = $productData['product_name'];
         $product_code = $productData['product_code'];
         $type = $productData['type'];
@@ -111,8 +112,8 @@ class Product extends Connection
         }
 
         // Assuming the table name is 'products'
-        $query = "INSERT INTO products (product_name, product_code, type, category, uom, cost, selling, balance, productphoto) 
-            VALUES ('$product_name', '$product_code', '$type', '$category', '$uom', '$cost', '$selling', '$balance', '$photo')";
+        $query = "INSERT INTO products (productid, product_name, product_code, type, category, uom, cost, selling, balance, productphoto) 
+            VALUES ('$productid', '$product_name', '$product_code', '$type', '$category', '$uom', '$cost', '$selling', '$balance', '$photo')";
 
         $result = mysqli_query($connection, $query);
 
@@ -179,5 +180,39 @@ class Product extends Connection
         return false;
     }
     
+
+    public function getProductIdBySupplierID($supplierID)
+{
+    $connection = $this->getConnection();
+
+    // Assuming the table name is 'products'
+    $query = "SELECT productid, product_name, category, selling, balance, productphoto FROM products WHERE supplierid = ?";
+    $statement = mysqli_prepare($connection, $query);
+
+    if ($statement) {
+        mysqli_stmt_bind_param($statement, 'i', $supplierID);
+        mysqli_stmt_execute($statement);
+
+        $result = mysqli_stmt_get_result($statement);
+
+        if ($result) {
+            $products = array();
+
+            while ($row = mysqli_fetch_assoc($result)) {
+                // Handle the productphoto column
+                $row['productphoto'] = base64_encode($row['productphoto']);
+
+                $products[] = $row;
+            }
+
+            // Return the array of products
+            return $products;
+        }
+    }
+
+    return false;
+}
+
+
 
 }
