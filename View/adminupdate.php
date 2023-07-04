@@ -2,6 +2,7 @@
 session_start();
 
 include "../config/autoload.php";
+
 $show_error = false;
 $show_success = false;
 $show_passwordmismatch = false;
@@ -11,6 +12,7 @@ $adminController = new AdminController();
 $adminId = $_SESSION['adminId']; // Get the admin ID from the session
 
 $adminData = $adminController->getAdminByIdController($adminId);
+
 if ($adminData) {
     $adminemail = $adminData['adminEmail'];
     $adminusername = $adminData['adminUser'];
@@ -30,6 +32,7 @@ if (isset($_POST['Update'])) {
     } else {
         // Update admin details in the database
         $result = $adminController->insertAdminController($adminId, $email, $password, $username);
+
         if ($result) {
             // Admin details updated successfully
             $show_success = true;
@@ -49,7 +52,7 @@ if (isset($_POST['Update'])) {
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Complaints</title>
+    <title>Admin Profile</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
 </head>
 
@@ -57,12 +60,13 @@ if (isset($_POST['Update'])) {
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
 
     <?php include "adminnavigation.php"; ?>
+
     <div class="d-flex flex-column justify-content-center align-item-center vh-100" style="padding-left: 400px; padding-right: 400px">
         <form action="" method="post">
             <div>
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item" aria-current="page">Manage Admin</li>
+                        <li class="breadcrumb-item" aria-current="page">Admin Profile</li>
                         <li class="breadcrumb-item active" aria-current="page">Update Admin Details</li>
                     </ol>
                 </nav>
@@ -78,18 +82,18 @@ if (isset($_POST['Update'])) {
                 ';
             } elseif ($show_success) {
                 echo '
-    <div class="my-3 alert alert-success" role="alert">
-        Admin details updated successfully!
-    </div>
-    ';
+                <div class="my-3 alert alert-success" role="alert">
+                    Admin details updated successfully!
+                </div>
+                ';
                 // Refresh the page in 2 seconds
                 echo '
-    <script>
-        setTimeout(function(){
-            location.reload();
-        }, 2000);
-    </script>
-    ';
+                <script>
+                    setTimeout(function(){
+                        location.reload();
+                    }, 2000);
+                </script>
+                ';
             } elseif ($show_passwordmismatch) {
                 echo '
                 <div class="my-3 alert alert-danger" role="alert">
@@ -98,7 +102,6 @@ if (isset($_POST['Update'])) {
                 ';
             }
             ?>
-
 
             <div class="mb-3">
                 <label for="email" class="form-label">Email address</label>
@@ -121,8 +124,6 @@ if (isset($_POST['Update'])) {
             </div>
         </form>
     </div>
-
-
 </body>
 
 </html>

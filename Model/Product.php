@@ -31,42 +31,32 @@ class Product extends Connection
 
 
     public function deleteProducts($productIds)
-    {
-        $connection = $this->getConnection();
+{
+    $connection = $this->getConnection();
 
-        // Assuming the table name is 'products'
-        $deleteQuery = "DELETE FROM products WHERE productid IN (";
-        $deleteQuery .= implode(',', array_fill(0, count($productIds), '?'));
-        $deleteQuery .= ")";
-        $deleteStatement = mysqli_prepare($connection, $deleteQuery);
+    $deleteQuery = "DELETE FROM products WHERE productid IN (";
+    $deleteQuery .= implode(',', array_fill(0, count($productIds), '?'));
+    $deleteQuery .= ")";
+    $deleteStatement = mysqli_prepare($connection, $deleteQuery);
+    
+    if ($deleteStatement) {
+        // Bind the product ID parameters for deletion
+        $types = str_repeat('s', count($productIds)); // 's' for string
+        mysqli_stmt_bind_param($deleteStatement, $types, ...$productIds);
+    
+        // Execute the delete statement
+        $deleteSuccess = mysqli_stmt_execute($deleteStatement);
 
-        if ($deleteStatement) {
-            // Bind the product ID parameters for deletion
-            $types = str_repeat('i', count($productIds));
-            mysqli_stmt_bind_param($deleteStatement, $types, ...$productIds);
-
-            // Execute the delete statement
-            $deleteSuccess = mysqli_stmt_execute($deleteStatement);
-
-            if ($deleteSuccess) {
-                // Update product IDs to maintain coherence
-                $updateQuery = "SET @count = 0";
-                mysqli_query($connection, $updateQuery);
-
-                $updateQuery = "UPDATE products SET productid = @count:= @count + 1";
-                mysqli_query($connection, $updateQuery);
-
-                $updateQuery = "ALTER TABLE products AUTO_INCREMENT = 1";
-                mysqli_query($connection, $updateQuery);
-
-                return true;
-            }
-
-            return false;
+        if ($deleteSuccess) {
+            return true;
         }
 
         return false;
     }
+
+    return false;
+}
+
 
     public function editProduct($productId, $name, $category, $sellingPrice, $balance, $productPhoto)
     {

@@ -14,6 +14,15 @@ session_start();
 
 // Check if the addToCart form is submitted
 if (isset($_POST['addToCart'])) {
+    // Check if the user is logged in
+    if (!isset($_SESSION['userId'])) {
+        // Redirect to the login page
+        echo '<script>
+            window.location.href = "login.php";
+        </script>';
+        exit();
+    }
+
     // Retrieve the product ID
     $productId = $_POST['productId'];
 
@@ -45,7 +54,7 @@ if (isset($_POST['addToCart'])) {
 <html lang="en" data-bs-theme="dark">
 <html>
 <head>
-    <title>Product Information</title>
+    <title>Megah Online Store</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/css/bootstrap.min.css">
     <style>
         .card-img-top {
@@ -56,7 +65,7 @@ if (isset($_POST['addToCart'])) {
 </head>
 <body>
     <div class="container">
-        <h1 class="mt-4">Product Information</h1>
+        <h1 class="mt-4">Welcome To Megah Online Store!</h1>
         <?php if (isset($_SESSION['successMessage'])): ?>
             <div class="alert alert-success" role="alert">
                 <?php echo $_SESSION['successMessage']; ?>
@@ -73,21 +82,51 @@ if (isset($_POST['addToCart'])) {
                         <p class="card-text">Category: <?php echo $product['category']; ?></p>
                         <p class="card-text">Price: RM<?php echo $product['selling']; ?></p>
                         <p class="card-text"><?php echo $product['balance']; ?> units left</p>
-                        <form method="post" action="">
-                            <input type="hidden" name="productId" value="<?php echo $product['productid']; ?>">
-                            <button type="submit" name="addToCart" class="btn btn-primary">
+                        <?php if (isset($_SESSION['userId'])): ?>
+                            <form method="post" action="">
+                                <input type="hidden" name="productId" value="<?php echo $product['productid']; ?>">
+                                <button type="submit" name="addToCart" class="btn btn-primary">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bag" viewBox="0 0 16 16">
+                                        <path d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1zm3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4h-3.5zM2 5h12v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V5z"/>
+                                    </svg>
+                                    Add to Cart
+                                </button>
+                            </form>
+                        <?php else: ?>
+                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#loginModal">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bag" viewBox="0 0 16 16">
                                     <path d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1zm3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4h-3.5zM2 5h12v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V5z"/>
                                 </svg>
                                 Add to Cart
                             </button>
-                        </form>
+                        <?php endif; ?>
                     </div>
                 </div>
             </div>
             <?php endforeach; ?>
         </div>
     </div>
+    
+    <!-- Login Modal -->
+    <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="loginModalLabel">Login Required</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>You need to be logged in to add an item to the cart.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <a href="registration.php" class="btn btn-primary">Register</a>
+                    <a href="userlogin.php" class="btn btn-primary">Login</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.min.js"></script>
    
 </body>

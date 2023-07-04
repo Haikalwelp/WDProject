@@ -16,21 +16,6 @@ class User extends Connection
         }
     }
 
-    public function getAllUsers()
-    {
-        $connection = $this->getConnection();
-
-        $query = "SELECT * FROM user";
-
-        $result = mysqli_query($connection, $query);
-
-        if (!$result) {
-            return false;
-        } else {
-            return $result;
-        }
-    }
-
     public function addUser($username, $email, $password)
     {
         $connection = $this->getConnection();
@@ -55,9 +40,9 @@ class User extends Connection
         $stmt->bind_param("i", $userId);
         $stmt->execute();
         $result = $stmt->get_result();
-    
+
         if ($result->num_rows > 0) {
-            return $result->fetch_assoc(); 
+            return $result->fetch_assoc();
         } else {
             return false;
         }

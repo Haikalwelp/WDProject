@@ -24,19 +24,19 @@ if (isset($_POST['Login'])) {
         $_SESSION['user_logged_out'] = false;
         $userData = $user->fetch_assoc();
         $userId = $userData['userid'];
-    
+
         // Assign the user ID to the session variable
         $_SESSION['userId'] = $userId;
-    
+
         // Create the user data array for the cookie
         $userData = [
             'login' => true,
             // Other relevant user data
         ];
-    
+
         // Set the cookie with the user data
         setcookie('user_data', json_encode($userData), time() + (86400 * 30), '/');
-    
+
         header("Location: catalog.php"); // Redirect to user page or any other desired page
         exit();
     } else {
@@ -66,7 +66,7 @@ if (isset($_POST['Login'])) {
         <div class="card px-5 w-50">
             <div class="card-body">
                 <div class="mt-3">
-                    <h1>Welcome to Megah Holdings - User Login</h1>
+                    <h1>Welcome to Megah Online Store - Customer Login</h1>
                 </div>
                 <div class="mt-3 mb-4">
                     <h3>Login to Access Your Account</h3>
@@ -88,9 +88,6 @@ if (isset($_POST['Login'])) {
                     <div class="mb-3">
                         <label class="form-label">Password</label>
                         <input type="password" class="form-control" placeholder="**********" name="password" required>
-                    </div>
-                    <div class="text-end">
-                        <button type="button" class="btn btn-link">Forgot password?</button>
                     </div>
                     <div class="my-3">
                         <input type="submit" value="Login" name="Login" class="btn btn-primary w-100">

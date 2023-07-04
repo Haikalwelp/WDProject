@@ -1,4 +1,5 @@
-<?
+<?php
+
 require_once "../config/autoload.php";
 
 class OrderController extends Order
@@ -23,9 +24,10 @@ class OrderController extends Order
         return $this->addOrder($orderData);
     }
 
-    public function getOrderByOrderIdController($orderId)
+    public function updateOrderStatusController($orderId, $newStatus)
     {
-        return $this->getOrderByOrderId($orderId);
+        return $this->updateOrderStatus($orderId, $newStatus);
     }
 }
+
 ?>

@@ -43,10 +43,6 @@
 
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm py-3 px-2 fixed-top z-3">
         <form class="container-fluid" action="" method="post">
-            <a class="btn btn-outline-secondary me-3" data-bs-toggle="offcanvas" href="#offcanvas" role="button" aria-controls="offcanvas">
-                <!-- Link with href -->
-                <span class="navbar-toggler-icon"></span>
-            </a>
 
             <a class="navbar-brand" href="#"><b>Megah Holdings</b></a>
 
@@ -79,7 +75,6 @@
 
         </form>
     </nav>
-    <?php include "sidebar.php" ?>
 
 </body>
 

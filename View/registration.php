@@ -23,16 +23,16 @@ if (isset($_POST['Register'])) {
     if ($userAdded) {
         // User registration successful
         $_SESSION['logged_out'] = false;
-        
+
         // Create the user data array for the cookie
         $userData = [
             'login' => true,
             // Other relevant user data
         ];
-        
+
         // Set the cookie with the user data
         setcookie('user_data', json_encode($userData), time() + (86400 * 30), '/');
-        
+
         header("Location: catalog.php"); // Redirect to login page or any other desired page
         exit();
     } else {
