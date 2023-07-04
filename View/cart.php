@@ -157,7 +157,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 </div>
                                 <div>
                                     <input type="radio" id="card" name="paymentMethod" value="card" disabled>
-                                    <label for="card">Debit/Credit Card</label>
+                                    <label for="card">Debit/Credit Card (In maintenance)</label>
                                 </div>
                             </div>
                             <button type="submit" class="btn btn-primary">Place Order</button>
