@@ -28,7 +28,7 @@ $message = isset($_GET['message']) ? $_GET['message'] : "";
 ?>
 
 <!DOCTYPE html>
-<html lang="en" data-bs-theme="dark">
+<html lang="en">
 
 <head>
     <title>Orders with Users</title>

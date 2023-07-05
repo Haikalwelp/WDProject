@@ -51,7 +51,7 @@ if (isset($_POST['addToCart'])) {
 ?>
 
 <!DOCTYPE html>
-<html lang="en" data-bs-theme="dark">
+<html lang="en">
 <html>
 <head>
     <title>Megah Online Store</title>

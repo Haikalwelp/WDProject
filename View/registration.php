@@ -44,7 +44,7 @@ if (isset($_POST['Register'])) {
 ?>
 
 <!DOCTYPE html>
-<html lang="en" data-bs-theme="dark">
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">

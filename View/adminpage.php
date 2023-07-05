@@ -9,7 +9,7 @@ if (!isset($_SESSION['admin_logged_out']) || $_SESSION['admin_logged_out']) {
 ?>
 
 <!DOCTYPE html>
-<html lang="en" data-bs-theme="dark">
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
